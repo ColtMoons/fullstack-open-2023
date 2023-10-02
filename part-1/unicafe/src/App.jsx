@@ -8,9 +8,6 @@ const App = () => {
   const [bad, setBad] = useState(0);
 
   const isFeedback = good || neutral || bad;
-
-  console.log(isFeedback);
-
   const handleGood = () => setGood(good + 1);
   const handleNeutral = () => setNeutral(neutral + 1);
   const handleBad = () => setBad(bad + 1);
