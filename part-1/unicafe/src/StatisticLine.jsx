@@ -1,9 +1,12 @@
 const StatisticLane = ({ text, value, isPercentage }) => {
   return (
-    <p>
-      {text}: {value}
-      {isPercentage && "%"}
-    </p>
+    <tr>
+      <td>{text}:</td>
+      <td>
+        {value}
+        {isPercentage && "%"}
+      </td>
+    </tr>
   );
 };
 

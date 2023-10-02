@@ -6,12 +6,20 @@ const Statistics = ({ good, bad, neutral }) => {
   const positive = (good / all) * 100;
   return (
     <>
-      <StatisticLane text={"Good"} value={good} />
-      <StatisticLane text={"Neutral"} value={neutral} />
-      <StatisticLane text={"Bad"} value={bad} />
-      <StatisticLane text={"All"} value={all} />
-      <StatisticLane text={"Average"} value={average} />
-      <StatisticLane text={"Positive"} value={positive} isPercentage={true} />
+      <table>
+        <tbody>
+          <StatisticLane text={"Good"} value={good} />
+          <StatisticLane text={"Neutral"} value={neutral} />
+          <StatisticLane text={"Bad"} value={bad} />
+          <StatisticLane text={"All"} value={all} />
+          <StatisticLane text={"Average"} value={average} />
+          <StatisticLane
+            text={"Positive"}
+            value={positive}
+            isPercentage={true}
+          />
+        </tbody>
+      </table>
     </>
   );
 };
