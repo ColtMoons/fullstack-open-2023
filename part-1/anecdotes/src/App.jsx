@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Anecdote from "./Anecdote";
+import DayAnecdote from "./DayAnecdote";
 
 const App = () => {
   const anecdotes = [
@@ -22,15 +24,29 @@ const App = () => {
 
   const handleVote = () => {
     const quantity = vote[selected] || 0;
-    setVote({...vote, [selected]: quantity + 1});
-  }
-  
+    setVote({ ...vote, [selected]: quantity + 1 });
+  };
+
+  const favoriteId = () => {
+    const index = Object.keys(vote);
+    const favIndex = index.reduce((i, curr) => {
+      return vote[curr] > vote[i] ? curr : i;
+    }, 0);
+    return favIndex;
+  };
+
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <p>Has {vote[selected] || 0} votes</p>
-      <button onClick={handleRandomAnecdote}>next anecdote</button>
-      <button onClick={handleVote}>vote</button>
+      <h1>Anecdote</h1>
+      <DayAnecdote
+        handleRandomAnecdote={handleRandomAnecdote}
+        handleVote={handleVote}
+        vote={vote[selected]}
+        anecdote={anecdotes[selected]}
+      />
+
+      <h2>Anecdote with most votes</h2>
+      <Anecdote vote={vote[favoriteId()]} text={anecdotes[favoriteId()]} />
     </div>
   );
 };
