@@ -1,8 +1,6 @@
 const Total = ({ parts }) => {
-  const total = parts.reduce((accum, current) => {
-    return accum + current.exercises;
-  }, 0);
-  return <p>Number of exercises {total} </p>;
+  const total = parts.reduce((accum, current) => accum + current.exercises, 0);
+  return <strong>Number of exercises {total} </strong>;
 };
 
 export default Total;
