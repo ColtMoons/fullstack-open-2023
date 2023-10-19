@@ -1,13 +1,13 @@
-const Persons = ({filteredPersons}) => {
+import Person from "./Person";
+
+const Persons = ({ filteredPersons, handleDelete }) => {
   return (
     <>
       {filteredPersons.map((person) => (
-        <p key={person.name}>
-          {person.name} {person.number}
-        </p>
+        <Person key={person.id} person={person} handleDelete={() => handleDelete(person.id, person.name)}/>
       ))}
     </>
   );
-}
+};
 
 export default Persons;
