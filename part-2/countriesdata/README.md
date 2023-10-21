@@ -1,0 +1,1 @@
+This project use Open Weather API. To use the project add a .env file with VITE_WEATHER_KEY variable that should be a valid Open Weather API Key. 
