@@ -1,19 +1,29 @@
+//import necesary for backend without db
 const express = require("express");
-const morgan = require("morgan");
 const cors = require("cors");
+
+//create app with express
 const app = express();
 
+//middleware json and cors for backend
 app.use(express.json());
 app.use(cors());
+
+//middleware for deploy and have the frontend prod in the same path
 app.use(express.static("dist"));
+
+//logs middleware
+const morgan = require("morgan");
+//create a morgan log token
 morgan.token("body", (req) => {
   return JSON.stringify(req.body);
 });
-
+//logs middleware with morgan 
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
 );
 
+//list of persons
 let persons = [
   {
     id: 1,
@@ -38,9 +48,7 @@ let persons = [
 ];
 
 const generateId = () => {
-  return Math.random()
-    .toString(36)
-    .substring(2, 20 + 2);
+  return Math.random() * 99999999;
 };
 
 //get all exercise 3.1
@@ -101,7 +109,9 @@ app.post("/api/persons", (request, response) => {
   response.json(person);
 });
 
+//port to be use with env variable
 const PORT = process.env.PORT || 3001;
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
