@@ -30,27 +30,43 @@ app.use(
 
 //get all exercise 3.1
 app.get("/api/persons", (request, response) => {
-  Person.find({}).then((result) => {
-    response.json(result);
-  });
+  Person.find({})
+    .then((result) => {
+      response.json(result);
+    })
+    .catch((error) => {
+      response.status(500).send({ error: "bad request" });
+    });
 });
 
 //show info exercise 3.2
 app.get("/info", (request, response) => {
-  response.send(
-    `<p>Phonebook has info for ${persons.length} people</p><p>${Date()}</p>`
-  );
-});
-
-//get by id exercise 3.3
-app.get("/api/persons/:id", (request, response) => {
-  Person.findById(request.params.id).then((person) => {
-    response.json(person);
+  Person.find({}).then((result) => {
+    response.send(
+      `<p>Phonebook has info for ${result.length} people</p><p>${Date()}</p>`
+    );
   });
 });
 
+//get by id exercise 3.3
+app.get("/api/persons/:id", (request, response, next) => {
+  Person.findById(request.params.id)
+    .then((person) => {
+      if (!person) {
+        return response.status(404).end();
+      }
+      response.json(person);
+    })
+    .catch((error) => next(error));
+});
+
 //delete by id exercise 3.4
-app.delete("/api/persons/:id", (request, response) => {
+app.delete("/api/persons/:id", (request, response, next) => {
+  Person.findByIdAndRemove(request.params.id)
+    .then((result) => {
+      response.status(204).end();
+    })
+    .catch((error) => next(error));
 });
 
 //create new person exercise 3.5 3.6
@@ -76,10 +92,38 @@ app.post("/api/persons", (request, response) => {
     number: body.number,
   });
 
-  person.save().then(result => {
-    response.json(person);
-  });
+  person
+    .save()
+    .then((result) => {
+      response.json(person);
+    })
+    .catch((e) => {
+      response.status(500).json({ error: "something happened" });
+    });
 });
+
+app.put("/api/persons/:id", (request, response, next) => {
+  const { name, number } = request.body;
+  const person = { name, number };
+
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then((updatedNote) => {
+      response.json(updatedNote);
+    })
+    .catch((error) => next(error));
+});
+
+//error middleware just check for cast error
+const errorHandler = (error, request, response, next) => {
+  console.log(error);
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  }
+
+  next(error);
+};
+
+app.use(errorHandler);
 
 //port to be use with env variable
 const PORT = process.env.PORT;
