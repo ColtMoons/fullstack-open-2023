@@ -64,6 +64,13 @@ const App = () => {
         setTimeout(() => {
           setMessage(null);
         }, 5000);
+      }).catch(error => {
+         setMessage(`${error.response.data.error}`);
+         setError(true);
+         setTimeout(() => {
+           setMessage(null);
+           setError(false);
+         }, 5000);
       });
       return;
     }
@@ -71,15 +78,25 @@ const App = () => {
     const person = { name: newName, number: newPhone };
 
     //post new person
-    personsService.create(person).then((response) => {
-      setPersons([...persons, response]);
-      setNewName("");
-      setMessage(`Created ${response.name}`);
-      setNewPhone("");
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
-    });
+    personsService
+      .create(person)
+      .then((response) => {
+        setPersons([...persons, response]);
+        setNewName("");
+        setMessage(`Created ${response.name}`);
+        setNewPhone("");
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
+      })
+      .catch((error) => {
+        setMessage(`${error.response.data.error}`);
+        setError(true);
+        setTimeout(() => {
+          setMessage(null);
+          setError(false);
+        }, 5000);
+      });
   };
 
   const handleDelete = (id, name) => {
@@ -89,13 +106,12 @@ const App = () => {
     personsService
       .deletePerson(id)
       .then(() => {
-        setMessage(
-          `${name} has been deleted`
-        );
+        setMessage(`${name} has been deleted`);
         setTimeout(() => {
           setMessage(null);
         }, 5000);
-        setPersons(persons.filter((person) => person.id !== id))})
+        setPersons(persons.filter((person) => person.id !== id));
+      })
       .catch(() => {
         setPersons(persons.filter((person) => person.id !== id));
         setMessage(
